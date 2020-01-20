@@ -1,42 +1,157 @@
+# canonical version = 1.3.0
 using Test
+
+using LazyJSON
 include("example.jl")
 
-@testset "Smallest perfect number is classified correctly" begin
-   @test classify(6) == "perfect"
-end
-@testset "Medium perfect number is classified correctly" begin
-   @test classify(28) == "perfect"
-end
-@testset "Large perfect number is classified correctly" begin
-   @test classify(33550336) == "perfect"
-end
-@testset "Smallest abundant number is classified correctly" begin
-   @test classify(12) == "abundant"
-end
-@testset "Medium abundant number is classified correctly" begin
-   @test classify(30) == "abundant"
-end
-@testset "Large abundant number is classified correctly" begin
-   @test classify(33550335) == "abundant"
-end
-@testset "Smallest prime deficient number is classified correctly" begin
-   @test classify(2) == "deficient"
-end
-@testset "Smallest non-prime deficient number is classified correctly" begin
-   @test classify(4) == "deficient"
-end
-@testset "Medium deficient number is classified correctly" begin
-   @test classify(32) == "deficient"
-end
-@testset "Large deficient number is classified correctly" begin
-   @test classify(33550337) == "deficient"
-end
-@testset "Edge case (no factors other than itself) is classified correctly" begin
-   @test classify(1) == "deficient"
-end
-@testset "Zero is rejected (not a natural number)" begin
-   @test classify(0) == "Classification is only possible for natural numbers."
-end
-@testset "Negative integer is rejected (not a natural number)" begin
-   @test classify(-1) == "Classification is only possible for natural numbers."
+jsonfileinstringbecausecannotreadfromanotherfile=
+"""{
+    "exercise": "perfect-numbers",
+    "version": "1.1.0",
+    "cases": [
+        {
+            "description": "Perfect numbers",
+            "cases": [
+                {
+                    "description": "Smallest perfect number is classified correctly",
+                    "property": "classify",
+                    "input": {
+                        "number": 6
+                    },
+                    "expected": "perfect"
+                },
+                {
+                    "description": "Medium perfect number is classified correctly",
+                    "property": "classify",
+                    "input": {
+                        "number": 28
+                    },
+                    "expected": "perfect"
+                },
+                {
+                    "description": "Large perfect number is classified correctly",
+                    "property": "classify",
+                    "input": {
+                        "number": 33550336
+                    },
+                    "expected": "perfect"
+                }
+            ]
+        },
+        {
+            "description": "Abundant numbers",
+            "cases": [
+                {
+                    "description": "Smallest abundant number is classified correctly",
+                    "property": "classify",
+                    "input": {
+                        "number": 12
+                    },
+                    "expected": "abundant"
+                },
+                {
+                    "description": "Medium abundant number is classified correctly",
+                    "property": "classify",
+                    "input": {
+                        "number": 30
+                    },
+                    "expected": "abundant"
+                },
+                {
+                    "description": "Large abundant number is classified correctly",
+                    "property": "classify",
+                    "input": {
+                        "number": 33550335
+                    },
+                    "expected": "abundant"
+                }
+            ]
+        },
+        {
+            "description": "Deficient numbers",
+            "cases": [
+                {
+                    "description": "Smallest prime deficient number is classified correctly",
+                    "property": "classify",
+                    "input": {
+                        "number": 2
+                    },
+                    "expected": "deficient"
+                },
+                {
+                    "description": "Smallest non-prime deficient number is classified correctly",
+                    "property": "classify",
+                    "input": {
+                        "number": 4
+                    },
+                    "expected": "deficient"
+                },
+                {
+                    "description": "Medium deficient number is classified correctly",
+                    "property": "classify",
+                    "input": {
+                        "number": 32
+                    },
+                    "expected": "deficient"
+                },
+                {
+                    "description": "Large deficient number is classified correctly",
+                    "property": "classify",
+                    "input": {
+                        "number": 33550337
+                    },
+                    "expected": "deficient"
+                },
+
+                {
+                    "description": "Edge case (no factors other than itself) is classified correctly",
+                    "property": "classify",
+                    "input": {
+                        "number": 1
+                    },
+                    "expected": "deficient"
+                }
+            ]
+        },
+        {
+            "description": "Invalid inputs",
+            "cases": [
+                {
+                    "description": "Zero is rejected (not a natural number)",
+                    "property": "classify",
+                    "input": {
+                        "number": 0
+                    },
+                    "expected": {
+                        "error": "Classification is only possible for natural numbers."
+                    }
+                },
+                {
+                    "description": "Negative integer is rejected (not a natural number)",
+                    "property": "classify",
+                    "input": {
+                        "number": -1
+                    },
+                    "expected": {
+                        "error": "Classification is only possible for natural numbers."
+                    }
+                }
+            ]
+        }
+    ]
+}
+"""
+
+j = LazyJSON.value(jsonfileinstringbecausecannotreadfromanotherfile)
+
+for i in j["cases"]
+    for j in i["cases"]
+        des = String(j["description"])
+        inp = j["input"]["number"]
+
+        i["description"] == "Invalid inputs" ? exped = j["expected"]["error"] : exped = j["expected"]
+        @testset "$des" begin
+           @test classify(inp) == exped
+        end
+    end
 end

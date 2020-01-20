@@ -1,3 +1,6 @@
+## the line bellow has nothing to do with the code
+using Pkg; Pkg.add("LazyJSON")
+
 function classify(number)
     factors = []
     if number == 1
