@@ -12,7 +12,7 @@ outputfile = "parse code.txt"
 f = LazyJSON.parse(read(joinpath(dir,jsonfile)))
 
 CODE = """
-# canonical data version $(f["version"])
+# canonical data version $(j["version"])
 using Test
 
 include("perfect-numbers.jl")

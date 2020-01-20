@@ -1,4 +1,4 @@
-# canonical data version 1.1.0
+# canonical version = 1.1.0
 using Test
 
 include("perfect-numbers.jl")
